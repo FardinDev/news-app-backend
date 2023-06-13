@@ -37,7 +37,7 @@ class FeedController extends Controller
         }
 
 
-        $newsApi = $this->getFromNewsApi()['articles'];
+        $newsApi = $this->getFromNewsApi($request->page ?? 1)['articles'];
         $allArticles = [...$newsApi];
         $response = ArticleResource::collection($allArticles);
 
@@ -45,10 +45,10 @@ class FeedController extends Controller
     }
 
 
-    private function getFromNewsApi(){
+    private function getFromNewsApi($page){
         // https://newsapi.org/v2/everything?q=tesla&from=2023-05-11&sortBy=publishedAt&apiKey=93d2dc0d2b9741d6b615f46343872314
 
-        $response = Http::get('https://newsapi.org/v2/top-headlines?sources=bbc-news&from=2023-05-11&sortBy=popularity&apiKey=93d2dc0d2b9741d6b615f46343872314');
+        $response = Http::get("https://newsapi.org/v2/top-headlines?sources=abc-news,bbc-news,associated-press,bleacher-report&pageSize=10&page=".$page."&sortBy=popularity&apiKey=93d2dc0d2b9741d6b615f46343872314");
 
 
         return $response->collect();
